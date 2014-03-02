@@ -66,8 +66,6 @@ namespace Hangman
             StringBuilder sb = new StringBuilder();
             string ShrunkHideWord = HideWord.Replace(" ", "");
 
-            //Simple Change
-
             for (int i = 0; i < CurrWord.Length; i++)
             {
                 char c = CurrWord[i];
