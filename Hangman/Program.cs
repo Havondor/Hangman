@@ -11,14 +11,15 @@ namespace Hangman
         static void Main(string[] args)
         {
             Words wd = new Words();
-            Console.WriteLine("The Current Word is {0}", wd.HiddenWord());
-            Console.WriteLine("Enter a letter to try: ");
+            
 
-            int x = 0;
+            //int x = 0;
 
             while (1 == 1)
             {
-                string Input = Console.ReadLine();
+                Console.WriteLine("The Current Word is {0}", wd.HideWord);
+                Console.WriteLine("Enter a letter to try: ");
+                string Input = Console.ReadLine().ToLower();
                 int Num;
                 if (string.IsNullOrEmpty(Input) || int.TryParse(Input, out Num))
                 {
@@ -32,17 +33,14 @@ namespace Hangman
                 {
                     char c = Input[0];
                     wd.TryLetter(c);
-                    Console.WriteLine();
-                    Console.WriteLine("The Current Word is {0}", wd.HideWord);
-                    Console.WriteLine();
-                    Console.WriteLine("Enter a letter to try: ");
+                    
                 }
 
-                x += 1;
-                if (x == 2) 
-                {
-                    break;
-                }
+                //x += 1;
+                //if (x == 2) 
+                //{
+                //    break;
+                //}
             }
             
 

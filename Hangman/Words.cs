@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Hangman
 {
@@ -14,14 +15,23 @@ namespace Hangman
         public Words() 
         {
             SelectWord();
+            HiddenWord();
         }
 
         private void SelectWord()
         {
-            CurrWord = "hammer";
+            XDocument doc = XDocument.Load("Words.XML");
+
+            string[] words = doc.Descendants("word").Select(element => element.Value).ToArray();
+
+            int max = words.Count() - 1;
+
+            Random random = new Random();
+            int i = 2;//random.Next(max);
+            CurrWord = words[i];
         }
 
-        public string HiddenWord()
+        private string HiddenWord()
         {
             StringBuilder sb = new StringBuilder();
 
@@ -37,7 +47,7 @@ namespace Hangman
 
         public void TryLetter(char letter)
         {
-            int LetterIndex = CurrWord.IndexOf(letter);
+            int LetterIndex = CurrWord.ToLower().IndexOf(letter);
 
             if (LetterIndex != -1)
             {
@@ -61,7 +71,7 @@ namespace Hangman
                 char c = CurrWord[i];
                 char s = ShrunkHideWord[i];
 
-                if (c == letter)
+                if (char.ToLower(c) == char.ToLower(letter))
                 {
                     sb.Append(c);
                 }
