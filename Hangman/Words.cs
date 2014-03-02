@@ -11,24 +11,24 @@ namespace Hangman
     {
         private string CurrWord;
         public string HideWord;
+        private List<int> UsedIndex = new List<int>();
+        private string[] words;
+        Random random = new Random();
 
         public Words() 
         {
-            SelectWord();
-            HiddenWord();
+            GetWordList();
+        }
+
+        private void GetWordList()
+        {
+            XDocument doc = XDocument.Load("Words.XML");
+            words = doc.Descendants("word").Select(element => element.Value).ToArray();           
         }
 
         private void SelectWord()
         {
-            XDocument doc = XDocument.Load("Words.XML");
-
-            string[] words = doc.Descendants("word").Select(element => element.Value).ToArray();
-
-            int max = words.Count() - 1;
-
-            Random random = new Random();
-            int i = 2;//random.Next(max);
-            CurrWord = words[i];
+            CurrWord = words[NextIndex()];
         }
 
         private string HiddenWord()
@@ -47,7 +47,7 @@ namespace Hangman
 
         public void TryLetter(char letter)
         {
-            int LetterIndex = CurrWord.ToLower().IndexOf(letter);
+            int LetterIndex = CurrWord.ToLower().IndexOf(char.ToLower(letter));
 
             if (LetterIndex != -1)
             {
@@ -92,5 +92,25 @@ namespace Hangman
             HideWord = sb2.ToString().TrimEnd();
         }
 
+        public void NewWord()
+        {
+            SelectWord();
+            HiddenWord();
+        }
+
+        private int NextIndex()
+        {
+            int i = random.Next(words.Count() - 1);
+
+            if (UsedIndex != null && UsedIndex.Contains(i))
+            {
+                return NextIndex();
+            }
+            else
+            {
+                UsedIndex.Add(i);
+                return i;                   
+            }
+        }
     }
 }
